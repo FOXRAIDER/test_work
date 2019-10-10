@@ -15,6 +15,12 @@ class SpiderSpider(scrapy.Spider):
             url = response.urljoin(url)
             yield scrapy.Request(url = url, callback=self.parse_detail)
 
+
+        next_url_page = response.css('a.next::attr(href)').extract_first()
+        if next_url_page:
+            next_url_page = response.urljoin(next_url_page)
+            yield scrapy.Request(url = next_url_page, callback = self.parse)
+
         
 
     def parse_detail(self, response):        
